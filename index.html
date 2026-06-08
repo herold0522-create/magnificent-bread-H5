@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>豪士藜麦无边吐司 · 像素烘焙工坊</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <main id="app" class="app">
+
+    <!-- ============ 加载页（面团发酵进度） ============ -->
+    <section class="screen is-active" id="screenLoading" data-screen="loading">
+      <img class="bg" src="./assets2/clean/bg_s3.png" alt="" />
+      <div class="scrim"></div>
+      <div class="load-layout">
+        <p class="load-eyebrow">面团发酵中…</p>
+        <div class="load-dough-stage">
+          <img class="load-dough" id="loadDough" src="./assets2/clean/ferment_under.png" alt="发酵面团" />
+          <div class="load-bubbles" id="loadBubbles"></div>
+        </div>
+        <div class="load-bar"><i id="loadFill"></i><b id="loadPct">0%</b></div>
+        <p class="load-tip" id="loadTip">正在唤醒酵母…</p>
+      </div>
+    </section>
+
+    <!-- ============ 00 首页 ============ -->
+    <section class="screen" id="screenStart" data-screen="start">
+      <img class="bg" src="./assets2/clean/bg_start.png" alt="" />
+      <div class="scrim"></div>
+      <div class="start-layout">
+        <div class="title-card">
+          <p class="eyebrow">Pixel Bakery H5</p>
+          <h1>豪士藜麦<br><span>无边吐司工坊</span></h1>
+          <p class="subtitle">六个制作台，亲手做一条「好吃到没边了」的吐司</p>
+        </div>
+
+        <div class="hero-wrap">
+          <img class="hero-mascot" src="./assets2/clean/mascot.png" alt="吐司吉祥物" />
+          <img class="hero-npc" src="./assets2/clean/npc.png" alt="小面包师" />
+        </div>
+
+        <ul class="flow-preview">
+          <li><b>①</b> 选材台</li>
+          <li><b>②</b> 揉面台</li>
+          <li><b>③</b> 发酵箱</li>
+          <li><b>④</b> 烘焙炉</li>
+          <li><b>⑤</b> 切片机</li>
+          <li><b>⑥</b> 去边台</li>
+        </ul>
+
+        <button class="pixel-btn primary big pulse" id="btnStart">开始制作 ▶</button>
+        <p class="brand-mini">营养 · 松软 · 没有边 · 好吃到没边了</p>
+      </div>
+    </section>
+
+    <!-- ① 选材台 -->
+    <section class="screen station" id="screenS1" data-screen="s1">
+      <img class="bg" src="./assets2/clean/bg_s1.png" alt="" />
+      <div class="scrim"></div>
+      <header class="st-head">
+        <div class="st-step">制作台 ① / 6</div>
+        <h2 class="st-title">选材台 · 把好料拖进面盆</h2>
+        <div class="metric-hud" id="hud1"></div>
+      </header>
+
+      <p class="st-tip">传送带上把 <b>好原料</b> 拖进面盆，避开<b>坏东西</b>。坏料会让吐司变难嚼！</p>
+
+      <div class="checklist" id="s1Checklist"></div>
+
+      <div class="belt-wrap">
+        <div class="belt" id="s1Belt"></div>
+      </div>
+
+      <div class="bowl-zone" id="s1Bowl">
+        <img class="bowl-img" src="./assets2/clean/dough_plain.png" alt="面盆" />
+        <div class="bowl-label">面盆（拖到这里）</div>
+        <div class="bowl-burst" id="s1Burst"></div>
+      </div>
+
+      <button class="pixel-btn primary st-next" id="s1Next" disabled>集齐好料再继续</button>
+      <div class="toast-msg" id="toastMsg"></div>
+    </section>
+
+    <!-- ② 揉面台 -->
+    <section class="screen station" id="screenS2" data-screen="s2">
+      <img class="bg" src="./assets2/clean/bg_s2.png" alt="" />
+      <div class="scrim"></div>
+      <header class="st-head">
+        <div class="st-step">制作台 ② / 6</div>
+        <h2 class="st-title">揉面台 · 跟着节奏揉</h2>
+        <div class="metric-hud" id="hud2"></div>
+      </header>
+
+      <p class="st-tip">指针进 <b class="g-green">绿色区</b> 时点 / 滑「揉面」最佳，松软上升；红区太猛会让面团变硬。</p>
+
+      <div class="dough-stage">
+        <img class="dough" id="s2Dough" src="./assets2/clean/dough_plain.png" alt="面团" />
+        <div class="knead-progress"><span>揉面完成度</span><div class="kp-bar"><i id="s2Prog"></i></div></div>
+      </div>
+
+      <div class="art-bar" id="s2Bar">
+        <img src="./assets2/clean/bar_knead.png" alt="" />
+        <b class="art-needle" id="s2Needle"></b>
+      </div>
+
+      <button class="pixel-btn primary big knead-btn" id="s2Knead">揉面（点 / 左右滑）</button>
+      <button class="pixel-btn primary st-next" id="s2Next" disabled>把面团揉开再继续</button>
+    </section>
+
+    <!-- ③ 发酵箱 -->
+    <section class="screen station" id="screenS3" data-screen="s3">
+      <img class="bg" src="./assets2/clean/bg_s3.png" alt="" />
+      <div class="scrim"></div>
+      <header class="st-head">
+        <div class="st-step">制作台 ③ / 6</div>
+        <h2 class="st-title">发酵箱 · 控温控时</h2>
+        <div class="metric-hud" id="hud3"></div>
+      </header>
+
+      <p class="st-tip">选好温度，进度进 <b class="g-green">最佳发酵区</b> 时点「取出」。太早不松软，太晚跑风味。</p>
+
+      <img class="big-sprite" id="s3Dough" src="./assets2/clean/ferment_under.png" alt="发酵面团" />
+
+      <div class="art-bar" id="s3Bar">
+        <img src="./assets2/clean/bar_ferment.png" alt="" />
+        <b class="art-marker" id="s3Mark"></b>
+      </div>
+
+      <div class="temp-btns">
+        <button class="temp-btn" data-temp="low"><img src="./assets2/clean/ui_thermo.png" alt="">低温<small>慢</small></button>
+        <button class="temp-btn is-on" data-temp="mid"><img src="./assets2/clean/ui_thermo.png" alt="">适温<small>中</small></button>
+        <button class="temp-btn" data-temp="high"><img src="./assets2/clean/ui_flame.png" alt="">高温<small>快</small></button>
+      </div>
+
+      <button class="pixel-btn primary big take-btn" id="s3Take">取出面团</button>
+    </section>
+
+    <!-- ④ 烘焙炉 -->
+    <section class="screen station" id="screenS4" data-screen="s4">
+      <img class="bg" src="./assets2/clean/bg_s4.png" alt="" />
+      <div class="scrim"></div>
+      <header class="st-head">
+        <div class="st-step">制作台 ④ / 6 · 核心</div>
+        <h2 class="st-title">烘焙炉 · 看火候出炉</h2>
+        <div class="metric-hud" id="hud4"></div>
+      </header>
+
+      <p class="st-tip">火候进 <b class="g-gold">金黄最佳区</b> 时点「出炉」！太早没熟、太晚焦硬。火力越大进度越快。</p>
+
+      <img class="big-sprite" id="s4Bread" src="./assets2/clean/toast_raw.png" alt="烘焙吐司" />
+
+      <div class="art-bar" id="s4Bar">
+        <img src="./assets2/clean/bar_bake.png" alt="" />
+        <b class="art-marker" id="s4Mark"></b>
+      </div>
+
+      <div class="fire-btns">
+        <button class="fire-btn" data-fire="low"><img src="./assets2/clean/ui_flame.png" alt="">小火</button>
+        <button class="fire-btn is-on" data-fire="mid"><img src="./assets2/clean/ui_flame.png" alt="">中火</button>
+        <button class="fire-btn" data-fire="high"><img src="./assets2/clean/ui_flame.png" alt="">大火</button>
+      </div>
+
+      <button class="pixel-btn primary big take-btn" id="s4Out">出炉！</button>
+    </section>
+
+    <!-- ⑤ 切片机 -->
+    <section class="screen station" id="screenS5" data-screen="s5">
+      <img class="bg" src="./assets2/clean/bg_s5.png" alt="" />
+      <div class="scrim"></div>
+      <header class="st-head">
+        <div class="st-step">制作台 ⑤ / 6</div>
+        <h2 class="st-title">切片机 · 切出标准厚度</h2>
+        <div class="metric-hud" id="hud5"></div>
+      </header>
+
+      <p class="st-tip">切割线移到 <b class="g-green">标准厚度区</b> 时点「切」。太薄会碎，太厚难嚼，刚好最松软。</p>
+
+      <div class="slicer">
+        <div class="loaf" id="s5Loaf">
+          <div class="thick-zone"></div>
+          <img class="loaf-img" src="./assets2/clean/loaf_full.png" alt="吐司条" />
+          <div class="slice-cut" id="s5Cut"></div>
+        </div>
+        <div class="slice-tray" id="s5Tray"></div>
+        <div class="slice-count" id="s5Count">已切 0 / 3 片</div>
+      </div>
+
+      <button class="pixel-btn primary big take-btn" id="s5Slice">切一刀</button>
+      <button class="pixel-btn primary st-next hidden" id="s5Next">切好了，去边！</button>
+    </section>
+
+    <!-- ⑥ 去边台 -->
+    <section class="screen station" id="screenS6" data-screen="s6">
+      <img class="bg" src="./assets2/clean/bg_s6.png" alt="" />
+      <div class="scrim"></div>
+      <header class="st-head">
+        <div class="st-step">制作台 ⑥ / 6 · 收尾</div>
+        <h2 class="st-title">去边台 · 沿虚线切掉四边</h2>
+        <div class="metric-hud" id="hud6"></div>
+      </header>
+
+      <p class="st-tip">沿四条 <b>虚线</b> 滑动去边。切干净 → 吐司边弹飞，组成「好吃到没边了」！</p>
+
+      <div class="trim-stage">
+        <div class="trim-toast" id="s6Toast">
+          <img class="trim-core" src="./assets2/clean/toast_core.png" alt="吐司" />
+          <div class="trim-edge edge-top" data-edge="top"><img src="./assets2/clean/edge_top.png" alt="" /></div>
+          <div class="trim-edge edge-right" data-edge="right"><img src="./assets2/clean/edge_right.png" alt="" /></div>
+          <div class="trim-edge edge-bottom" data-edge="bottom"><img src="./assets2/clean/edge_bottom.png" alt="" /></div>
+          <div class="trim-edge edge-left" data-edge="left"><img src="./assets2/clean/edge_left.png" alt="" /></div>
+          <img class="edge-mon" id="s6Mon" src="./assets2/clean/edge_monster.png" alt="硬边小怪兽" />
+          <div class="trim-spark" id="s6Spark"></div>
+        </div>
+        <div class="fly-words" id="s6Words"></div>
+      </div>
+
+      <button class="pixel-btn primary big st-next" id="s6Done" disabled>把四边都去掉</button>
+    </section>
+
+    <!-- ============ 结算 ============ -->
+    <section class="screen" id="screenResult" data-screen="result">
+      <img class="bg" src="./assets2/clean/scorecard_bg.png" alt="" />
+      <div class="result-slogan"><span>豪士豪士，好吃好吃！</span></div>
+      <div class="result-hero">
+        <div class="grade-wrap">
+          <img class="grade-art" id="rBadge" src="./assets2/clean/badge_s.png" alt="" />
+          <span class="grade-letter" id="rGrade">S</span>
+        </div>
+        <div class="stars" id="rStars"></div>
+        <h2 id="rTitle">没边大师！</h2>
+      </div>
+
+      <div class="result-card" id="poster">
+        <p class="result-copy" id="rCopy"></p>
+
+        <div class="metric-bars" id="rMetrics"></div>
+
+        <div class="station-scores">
+          <h3>各台完成度</h3>
+          <div class="ss-grid" id="rStations"></div>
+        </div>
+
+        <div class="product-show">
+          <img class="product-front" src="./assets2/clean/product_front.png" alt="豪士藜麦吐司面包" />
+          <div class="product-cap">
+            <b>豪士藜麦吐司面包</b>
+            <span>玻利维亚进口红藜麦</span>
+            <span>高蛋白 · 0 反式脂肪 · 松软无边</span>
+          </div>
+        </div>
+
+        <div class="brand-copy">
+          <b>豪士藜麦无边吐司</b>
+          <span>营养 · 松软 · 没有边</span>
+          <span class="big-line">好吃到没边了！</span>
+        </div>
+      </div>
+      <a class="pixel-btn primary buy-btn" id="btnBuy"
+         href="https://e.tb.cn/h.R8t3eUEHTzoUfXq?tk=MkEEgcvWSX2"
+         target="_blank" rel="noopener noreferrer">🛒 去买 S 级无边面包 ▶</a>
+      <p class="buy-tip">把刚做好的「好吃到没边了」带回家 · 淘宝大促价保</p>
+      <div class="result-actions">
+        <button class="pixel-btn" id="btnReplay">再做一条</button>
+        <button class="pixel-btn primary" id="btnHome">回到首页</button>
+      </div>
+    </section>
+
+    <!-- 左上角品牌 logo（加载页外全程显示） -->
+    <img class="brand-logo hidden" id="brandLogo" src="./assets2/clean/logo.png" alt="HORSH 豪士" />
+
+    <!-- 结算页「下滑去购买」提示 -->
+    <div class="scroll-hint hidden" id="scrollHint">下滑去买同款 ▼</div>
+
+    <!-- 全程跟随的小面包师（站台时显示，按操作变表情） -->
+    <div class="npc-buddy hidden" id="npcBuddy">
+      <div class="npc-bubble" id="npcBubble"></div>
+      <img id="npcFace" src="./assets2/clean/npc.png" alt="小面包师" />
+    </div>
+  </main>
+
+  <script src="./main.js"></script>
+</body>
+</html>

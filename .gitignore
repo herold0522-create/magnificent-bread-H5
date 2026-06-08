@@ -1,0 +1,16 @@
+# 原始素材（带中文名/各种格式）—— 仅作本地源文件，部署只用 assets2/clean
+/assets2/*
+!/assets2/clean/
+
+# 根目录大图（外景源图，未被游戏引用）
+/*.png
+
+# 占位素材生成脚本（旧）
+build_placeholder_assets.py
+
+# 本地编辑器/环境设置
+.claude/settings.local.json
+
+# 系统
+Thumbs.db
+.DS_Store
