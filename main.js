@@ -1005,10 +1005,9 @@ function showResult() {
   if (buyTip) buyTip.textContent = (grade === 'S' || grade === 'A')
     ? '把刚做好的「好吃到没边了」带回家 · 淘宝大促价保'
     : '先买条 S 级成品尝尝「好吃到没边了」的标准，下次做得更好！';
+  // 购买按钮：无论做成什么样，都引导去购买 S 级无边面包
   const buyBtn = $('#btnBuy');
-  if (buyBtn) buyBtn.textContent = (grade === 'S' || grade === 'A')
-    ? `🛒 去买 ${grade} 级无边面包 ▶`
-    : '🛒 先买 S 级成品尝尝 ▶';
+  if (buyBtn) buyBtn.textContent = '🛒 去购买 S 级无边面包 ▶';
 
   // 五维指标条（带图标）
   const bars = [
