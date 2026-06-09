@@ -40,15 +40,6 @@
           <img class="hero-npc" src="./assets2/clean/npc.png" alt="小面包师" />
         </div>
 
-        <ul class="flow-preview">
-          <li><b>①</b> 选材台</li>
-          <li><b>②</b> 揉面台</li>
-          <li><b>③</b> 发酵箱</li>
-          <li><b>④</b> 烘焙炉</li>
-          <li><b>⑤</b> 切片机</li>
-          <li><b>⑥</b> 去边台</li>
-        </ul>
-
         <button class="pixel-btn primary big pulse" id="btnStart">开始制作 ▶</button>
         <p class="brand-mini">营养 · 松软 · 没有边 · 好吃到没边了</p>
       </div>
@@ -73,12 +64,12 @@
       </div>
 
       <div class="bowl-zone" id="s1Bowl">
-        <img class="bowl-img" src="./assets2/clean/dough_plain.png" alt="面盆" />
-        <div class="bowl-label">面盆（拖到这里）</div>
+        <img class="bowl-img" src="./assets2/clean/空盆.png" alt="面盆" />
         <div class="bowl-burst" id="s1Burst"></div>
+        <div class="drag-demo hidden" id="s1Demo" aria-hidden="true">👆</div>
       </div>
 
-      <button class="pixel-btn primary st-next" id="s1Next" disabled>集齐好料再继续</button>
+      <div class="st-foot"><button class="pixel-btn primary st-next" id="s1Next" disabled>集齐好料再继续</button></div>
       <div class="toast-msg" id="toastMsg"></div>
     </section>
 
@@ -92,11 +83,11 @@
         <div class="metric-hud" id="hud2"></div>
       </header>
 
-      <p class="st-tip">指针进 <b class="g-green">绿色区</b> 时点 / 滑「揉面」最佳，松软上升；红区太猛会让面团变硬。</p>
+      <p class="st-tip">指针进 <b class="g-green">绿色区</b> 时点「揉面」最佳，松软上升；红区太猛会让面团变硬。</p>
 
       <div class="dough-stage">
-        <img class="dough" id="s2Dough" src="./assets2/clean/dough_plain.png" alt="面团" />
         <div class="knead-progress"><span>揉面完成度</span><div class="kp-bar"><i id="s2Prog"></i></div></div>
+        <img class="dough" id="s2Dough" src="./assets2/clean/dough_plain.png" alt="面团" />
       </div>
 
       <div class="art-bar" id="s2Bar">
@@ -104,8 +95,10 @@
         <b class="art-needle" id="s2Needle"></b>
       </div>
 
-      <button class="pixel-btn primary big knead-btn" id="s2Knead">揉面（点 / 左右滑）</button>
-      <button class="pixel-btn primary st-next" id="s2Next" disabled>把面团揉开再继续</button>
+      <div class="st-foot">
+        <button class="pixel-btn primary big knead-btn" id="s2Knead">揉面（点击）<i class="tap-hand" id="s2Hand" aria-hidden="true">👆</i></button>
+        <button class="pixel-btn primary st-next hidden" id="s2Next" disabled>把面团揉开再继续</button>
+      </div>
     </section>
 
     <!-- ③ 发酵箱 -->
@@ -128,12 +121,12 @@
       </div>
 
       <div class="temp-btns">
-        <button class="temp-btn" data-temp="low"><img src="./assets2/clean/ui_thermo.png" alt="">低温<small>慢</small></button>
-        <button class="temp-btn is-on" data-temp="mid"><img src="./assets2/clean/ui_thermo.png" alt="">适温<small>中</small></button>
-        <button class="temp-btn" data-temp="high"><img src="./assets2/clean/ui_flame.png" alt="">高温<small>快</small></button>
+        <button class="temp-btn" data-temp="low"><img src="./assets2/clean/ui_thermo.png" alt="">低温</button>
+        <button class="temp-btn is-on" data-temp="mid"><img src="./assets2/clean/ui_thermo.png" alt="">适温</button>
+        <button class="temp-btn" data-temp="high"><img src="./assets2/clean/ui_flame.png" alt="">高温</button>
       </div>
 
-      <button class="pixel-btn primary big take-btn" id="s3Take">取出面团</button>
+      <div class="st-foot"><button class="pixel-btn primary big take-btn" id="s3Take">取出面团<i class="tap-hand hidden" id="s3Hand" aria-hidden="true">👆</i></button></div>
     </section>
 
     <!-- ④ 烘焙炉 -->
@@ -161,7 +154,7 @@
         <button class="fire-btn" data-fire="high"><img src="./assets2/clean/ui_flame.png" alt="">大火</button>
       </div>
 
-      <button class="pixel-btn primary big take-btn" id="s4Out">出炉！</button>
+      <div class="st-foot"><button class="pixel-btn primary big take-btn" id="s4Out">出炉！</button></div>
     </section>
 
     <!-- ⑤ 切片机 -->
@@ -180,14 +173,16 @@
         <div class="loaf" id="s5Loaf">
           <div class="thick-zone"></div>
           <img class="loaf-img" src="./assets2/clean/loaf_full.png" alt="吐司条" />
-          <div class="slice-cut" id="s5Cut"></div>
+          <div class="slice-cut" id="s5Cut"><img class="knife" id="s5Knife" src="./assets2/clean/knife.png" alt="切刀"></div>
         </div>
         <div class="slice-tray" id="s5Tray"></div>
         <div class="slice-count" id="s5Count">已切 0 / 3 片</div>
       </div>
 
-      <button class="pixel-btn primary big take-btn" id="s5Slice">切一刀</button>
-      <button class="pixel-btn primary st-next hidden" id="s5Next">切好了，去边！</button>
+      <div class="st-foot">
+        <button class="pixel-btn primary big take-btn" id="s5Slice">切一刀<i class="tap-hand hidden" id="s5Hand" aria-hidden="true">👆</i></button>
+        <button class="pixel-btn primary st-next hidden" id="s5Next">切好了，去边！</button>
+      </div>
     </section>
 
     <!-- ⑥ 去边台 -->
@@ -211,11 +206,13 @@
           <div class="trim-edge edge-left" data-edge="left"><img src="./assets2/clean/edge_left.png" alt="" /></div>
           <img class="edge-mon" id="s6Mon" src="./assets2/clean/edge_monster.png" alt="硬边小怪兽" />
           <div class="trim-spark" id="s6Spark"></div>
+          <img class="s6-demo-knife hidden" id="s6DemoKnife" src="./assets2/clean/knife.png" alt="" aria-hidden="true" />
         </div>
         <div class="fly-words" id="s6Words"></div>
       </div>
+      <img class="s6-cut-knife hidden" id="s6Knife" src="./assets2/clean/knife.png" alt="" aria-hidden="true" />
 
-      <button class="pixel-btn primary big st-next" id="s6Done" disabled>把四边都去掉</button>
+      <div class="st-foot"><button class="pixel-btn primary big st-next" id="s6Done" disabled>把四边都去掉</button></div>
     </section>
 
     <!-- ============ 结算 ============ -->
@@ -269,6 +266,11 @@
     <!-- 左上角品牌 logo（加载页外全程显示） -->
     <img class="brand-logo hidden" id="brandLogo" src="./assets2/clean/logo.png" alt="HORSH 豪士" />
 
+    <!-- 右上角旋转音符：点击开/关背景音乐 -->
+    <button class="music-btn paused" id="musicBtn" aria-label="背景音乐开关"><span class="note">♪</span></button>
+    <span class="music-hint hidden" id="musicHint">点击音符可关闭音乐</span>
+    <audio id="bgm" src="./豪士有好事.mp3" loop preload="auto"></audio>
+
     <!-- 结算页「下滑去购买」提示 -->
     <div class="scroll-hint hidden" id="scrollHint">下滑去买同款 ▼</div>
 
@@ -277,6 +279,25 @@
       <div class="npc-bubble" id="npcBubble"></div>
       <img id="npcFace" src="./assets2/clean/npc.png" alt="小面包师" />
     </div>
+
+    <!-- 制作台玩法提示弹窗（进台弹出，点任意处关闭） -->
+    <div class="tip-modal hidden" id="tipModal">
+      <div class="tip-modal-card" id="tipModalCard"></div>
+      <p class="tip-modal-hint">点击任意处开始 ▶</p>
+    </div>
+
+    <!-- 结算前：产品箱弹窗 -->
+    <div class="prod-modal hidden" id="productModal">
+      <p class="prod-modal-top">面包出炉啦！</p>
+      <div class="prod-modal-card">
+        <img class="prod-box-img" src="./assets2/clean/product_pack.png" alt="豪士藜麦吐司礼盒" />
+        <p class="prod-modal-text">每一步的完美，<br>才能造就豪士的好吃</p>
+      </div>
+      <p class="tip-modal-hint">点击开箱 ▶</p>
+    </div>
+
+    <!-- 抛掷产品特效层（水果忍者式） -->
+    <div class="throw-fx hidden" id="throwFx"></div>
   </main>
 
   <script src="./main.js"></script>

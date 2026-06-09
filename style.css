@@ -37,7 +37,13 @@ img{ image-rendering:pixelated; image-rendering:crisp-edges; }
 .scrim{ position:absolute; inset:0; z-index:1; pointer-events:none;
   background:linear-gradient(180deg, rgba(40,26,12,.5) 0%, rgba(255,244,222,.28) 26%,
             rgba(255,244,222,.18) 60%, rgba(40,26,12,.42) 100%); }
-.screen > :not(.bg):not(.scrim){ position:relative; z-index:2; }
+.screen > :not(.bg):not(.scrim):not(.st-foot){ position:relative; z-index:2; }
+/* 制作台底部按钮坞：每一幕的主按钮都固定在同一位置，
+   且与首页「开始制作」按钮处于相同的页面相对高度 */
+.st-foot{ position:absolute; left:0; right:0; bottom:16.5%; z-index:5;
+  display:flex; flex-direction:column; align-items:center; gap:9px; padding:0 16px;
+  pointer-events:none; }
+.st-foot > *{ pointer-events:auto; }
 
 /* ---------- 通用按钮 ---------- */
 .pixel-btn{
@@ -53,6 +59,13 @@ img{ image-rendering:pixelated; image-rendering:crisp-edges; }
 .pixel-btn.big{ font-size:22px; padding:15px 22px; }
 .pixel-btn.pulse{ animation:btnPulse 1.1s ease-in-out infinite; }
 @keyframes btnPulse{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
+
+/* 主操作按钮统一尺寸：每一幕的按钮都与首页「开始制作」等高同字号、单行居中 */
+#btnStart, .st-foot .pixel-btn{
+  display:flex; align-items:center; justify-content:center;
+  min-height:64px; font-size:22px; padding:6px 20px; line-height:1.2;
+  white-space:nowrap; text-align:center;
+}
 
 .eyebrow{ font-family:'Press Start 2P',monospace; font-size:10px; letter-spacing:1px; color:var(--gold); text-shadow:1px 1px 0 #000; }
 .g-green{ color:#2f7a3a; } .g-gold{ color:#b5650d; }
@@ -95,18 +108,12 @@ img{ image-rendering:pixelated; image-rendering:crisp-edges; }
 @keyframes popIn{ from{transform:scale(.6);opacity:0} to{transform:scale(1);opacity:1} }
 
 .hero-wrap{ position:relative; display:flex; align-items:flex-end; justify-content:center;
-  width:220px; height:170px; }
-.hero-mascot{ width:138px; height:138px; object-fit:contain; animation:bob 1.9s ease-in-out infinite;
+  width:280px; height:230px; }
+.hero-mascot{ width:180px; height:180px; object-fit:contain; animation:bob 1.9s ease-in-out infinite;
   filter:drop-shadow(0 8px 8px rgba(0,0,0,.35)); z-index:2; }
-.hero-npc{ position:absolute; right:-6px; bottom:0; width:92px; object-fit:contain;
+.hero-npc{ position:absolute; right:-8px; bottom:0; width:120px; object-fit:contain;
   filter:drop-shadow(0 6px 6px rgba(0,0,0,.35)); animation:bob 2.3s ease-in-out infinite; }
 @keyframes bob{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-
-.flow-preview{ list-style:none; display:grid; grid-template-columns:repeat(3,1fr); gap:8px;
-  width:100%; max-width:320px; }
-.flow-preview li{ background:rgba(255,247,225,.85); border:2px solid var(--gold-d); border-radius:12px;
-  font-size:14px; color:var(--brown); text-align:center; padding:7px 2px; }
-.flow-preview b{ display:block; color:var(--gold-d); font-size:16px; }
 
 .brand-mini{ font-size:13px; color:#fff; text-shadow:1px 1px 0 #000; text-align:center; }
 #btnStart{ width:240px; }
@@ -114,20 +121,73 @@ img{ image-rendering:pixelated; image-rendering:crisp-edges; }
 /* =====================================================================
    制作台通用
 ===================================================================== */
-.station{ justify-content:flex-start; gap:9px; }
+.station{ justify-content:flex-start; gap:9px; padding-bottom:200px; }
 .st-head{ width:100%; max-width:380px; text-align:center; }
 .st-step{ font-family:'Press Start 2P',monospace; font-size:10px; color:var(--gold); margin-bottom:4px; text-shadow:1px 1px 0 #000; }
 .st-title{ font-size:23px; color:#fff; text-shadow:2px 2px 0 var(--brown), 0 0 6px rgba(0,0,0,.4); }
 .metric-hud{ display:flex; flex-wrap:wrap; gap:5px; justify-content:center; margin-top:7px; }
 .metric-hud .chip{ background:rgba(40,26,12,.72); border:2px solid var(--gold); border-radius:20px;
   font-size:12px; color:#ffe9b8; padding:2px 9px; }
-.metric-hud .chip b{ color:#fff; }
+.metric-hud .chip b{ color:#fff; transition:none; }
 .metric-hud .chip.chew b{ color:#ffb3b3; }
+/* 指标小卡「收纳」到数字时的弹跳高亮 */
+.metric-hud .chip{ transform-origin:center; }
+.metric-hud .chip.bump{ animation:chipBump .42s ease; }
+@keyframes chipBump{ 0%{ transform:scale(1); }
+  35%{ transform:scale(1.32); box-shadow:0 0 10px var(--gold); border-color:#fff; }
+  100%{ transform:scale(1); } }
 
-.st-tip{ width:100%; max-width:360px; font-size:13px; line-height:1.5; color:var(--ink);
-  background:rgba(255,247,228,.92); border:2px dashed var(--gold-d); border-radius:12px;
-  padding:8px 12px; text-align:center; }
-.st-tip b{ color:var(--gold-d); }
+/* 漂浮上升、飞向顶部指标卡的数字 */
+.metric-fly{ position:fixed; z-index:60; font-size:18px; font-weight:bold; pointer-events:none;
+  white-space:nowrap; letter-spacing:.5px; will-change:transform,opacity;
+  text-shadow:1px 1px 0 #fff, -1px -1px 0 #fff, 0 0 5px rgba(0,0,0,.35); }
+.metric-fly.plus{ color:var(--green-d); }
+.metric-fly.minus,.metric-fly.chew{ color:var(--red-d); }
+
+/* 玩法提示改为进台弹窗，内联提示隐藏（仅作为弹窗内容来源） */
+.st-tip{ display:none; }
+
+.tip-modal{ position:absolute; inset:0; z-index:80; cursor:pointer;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; padding:24px;
+  background:rgba(30,18,8,.55); animation:fadeIn .22s ease; }
+.tip-modal-card{ max-width:330px; font-size:17px; line-height:1.7; color:var(--ink);
+  background:rgba(255,247,228,.98); border:3px solid var(--gold-d); border-radius:18px;
+  padding:20px 22px; text-align:center; box-shadow:0 8px 0 rgba(0,0,0,.35);
+  animation:popIn .3s ease; }
+.tip-modal-card b{ color:var(--gold-d); }
+.tip-modal-card .g-green{ color:#2f7a3a; } .tip-modal-card .g-gold{ color:#b5650d; }
+.tip-modal-hint{ font-size:15px; color:#fff; text-shadow:1px 1px 0 #000;
+  animation:btnPulse 1.1s ease-in-out infinite; }
+
+/* 结算前的产品箱弹窗 */
+.prod-modal{ position:absolute; inset:0; z-index:82; cursor:pointer;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; padding:24px;
+  background:rgba(20,12,5,.74); animation:fadeIn .25s ease; }
+.prod-modal-top{ font-size:30px; font-weight:bold; color:var(--gold);
+  text-shadow:2px 2px 0 var(--gold-d), 0 0 8px rgba(0,0,0,.5); letter-spacing:1px;
+  animation:popIn .4s ease; }
+.prod-modal-card{ display:flex; flex-direction:column; align-items:center; gap:14px;
+  background:rgba(255,247,228,.98); border:3px solid var(--gold-d); border-radius:20px;
+  padding:22px 26px; max-width:320px; box-shadow:0 10px 0 rgba(0,0,0,.4); animation:popIn .35s ease; }
+.prod-box-img{ width:178px; height:auto; filter:drop-shadow(0 6px 8px rgba(0,0,0,.35)); }
+/* 土司箱入场：先放大、再缩小归位，之后轻微浮动 */
+.prod-box-img.land{ animation:boxLand .7s cubic-bezier(.34,1.45,.5,1) both, bob 2.1s ease-in-out .7s infinite; }
+@keyframes boxLand{ 0%{ transform:scale(.2); opacity:0; }
+  50%{ transform:scale(1.5); opacity:1; } 100%{ transform:scale(1); } }
+.prod-modal-text{ font-size:19px; line-height:1.6; color:var(--brown); text-align:center; font-weight:bold; }
+
+/* 抛掷产品特效（水果忍者式） */
+.throw-fx{ position:absolute; inset:0; z-index:90; pointer-events:none; overflow:hidden; }
+.toss-item{ position:absolute; top:0; left:50%; height:auto; will-change:transform;
+  filter:drop-shadow(0 6px 10px rgba(0,0,0,.45)); }
+
+/* 海报揭晓前：先隐藏结算内容，抛掷后再浮现 */
+#screenResult.pre-reveal .result-hero,
+#screenResult.pre-reveal .result-card,
+#screenResult.pre-reveal .buy-btn,
+#screenResult.pre-reveal .buy-tip,
+#screenResult.pre-reveal .result-actions{ opacity:0; transform:translateY(24px); }
+.result-hero,.result-card,.buy-btn,.buy-tip,.result-actions{ transition:opacity .5s ease, transform .5s ease; }
 
 .st-next{ width:100%; max-width:360px; margin-top:auto; }
 
@@ -154,6 +214,7 @@ img{ image-rendering:pixelated; image-rendering:crisp-edges; }
 .check-item.done::after{ content:'✓'; font-weight:bold; }
 
 .belt-wrap{ position:relative; width:100%; max-width:380px; height:104px; flex:0 0 auto;
+  margin-top:auto;                  /* 传送带下移到中部 */
   background:#5a3d22; border:3px solid var(--line); border-radius:14px; overflow:hidden;
   box-shadow:inset 0 4px 12px rgba(0,0,0,.4); }
 .belt-wrap::before{ content:''; position:absolute; inset:0;
@@ -170,13 +231,27 @@ img{ image-rendering:pixelated; image-rendering:crisp-edges; }
 .belt-item.grabbing{ cursor:grabbing; z-index:30; }
 .belt-item.grabbing img{ transform:scale(1.18); filter:drop-shadow(0 6px 8px rgba(0,0,0,.5)) brightness(1.06); }
 
-.bowl-zone{ position:relative; width:100%; max-width:380px; height:120px; flex:0 0 auto;
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  background:rgba(255,247,228,.55); border:3px dashed var(--gold-d); border-radius:18px; transition:.15s; }
-.bowl-zone.hot{ background:rgba(231,247,233,.8); border-color:var(--green-d); transform:scale(1.02); }
-.bowl-img{ width:88px; height:88px; object-fit:contain; filter:drop-shadow(0 4px 5px rgba(0,0,0,.3)); }
-.bowl-label{ font-size:13px; color:var(--brown); margin-top:-6px; }
+.bowl-zone{ position:relative; width:100%; max-width:380px; height:210px; flex:0 0 auto;
+  margin-top:auto;                 /* 下沉到按钮上方 */
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
+  background:transparent; border:none; transition:transform .15s; }
+.bowl-zone.hot{ transform:scale(1.06); }
+.bowl-img{ width:208px; height:auto; object-fit:contain; filter:drop-shadow(0 6px 7px rgba(0,0,0,.34)); }
+.bowl-zone.hot .bowl-img{ filter:drop-shadow(0 0 10px var(--green)) drop-shadow(0 6px 7px rgba(0,0,0,.34)); }
+.bowl-label{ font-size:13px; color:var(--brown); font-weight:bold; margin-top:-30px; text-shadow:0 1px 2px rgba(255,247,228,.9); }
 .bowl-burst{ position:absolute; inset:0; pointer-events:none; }
+/* 拖动演示：手势从传送带向面盆下拉，循环；玩家一操作即消失 */
+.drag-demo{ position:absolute; left:50%; top:-66px; z-index:6; font-size:42px; line-height:1;
+  pointer-events:none; filter:drop-shadow(0 3px 3px rgba(0,0,0,.5));
+  animation:dragDemo 1.9s ease-in-out infinite; }
+@keyframes dragDemo{
+  0%{   transform:translate(-50%,0)     scale(1);  opacity:0; }
+  12%{  transform:translate(-50%,0)     scale(.82); opacity:1; }   /* 按下抓取 */
+  20%{  transform:translate(-50%,0)     scale(1);  opacity:1; }
+  60%{  transform:translate(-50%,150px) scale(.9); opacity:1; }    /* 拖到面盆 */
+  72%{  transform:translate(-50%,150px) scale(.9); opacity:0; }
+  100%{ transform:translate(-50%,150px) scale(.9); opacity:0; }
+}
 .float-pop{ position:absolute; font-size:18px; font-weight:bold; pointer-events:none;
   text-shadow:1px 1px 0 #fff; animation:floatPop .9s ease-out forwards; }
 .float-pop.plus{ color:var(--green-d); } .float-pop.minus{ color:var(--red-d); }
@@ -185,7 +260,7 @@ img{ image-rendering:pixelated; image-rendering:crisp-edges; }
 
 /* ---------- ② 揉面台 ---------- */
 .dough-stage{ display:flex; flex-direction:column; align-items:center; gap:8px; margin:4px 0; }
-.dough{ width:120px; height:120px; object-fit:contain; transition:transform .12s;
+.dough{ width:172px; height:172px; object-fit:contain; transition:transform .12s;
   filter:drop-shadow(0 6px 6px rgba(0,0,0,.35)); }
 .dough.knead-good{ animation:doughSquish .18s ease; }
 .dough.knead-bad{ animation:doughHard .2s ease; }
@@ -195,10 +270,21 @@ img{ image-rendering:pixelated; image-rendering:crisp-edges; }
 .kp-bar{ height:16px; background:rgba(231,211,165,.85); border:3px solid var(--line); border-radius:10px;
   overflow:hidden; margin-top:4px; }
 .kp-bar > i{ display:block; height:100%; width:0; background:linear-gradient(90deg,#9be0a8,var(--green-d)); transition:width .2s; }
-.knead-btn{ width:100%; max-width:360px; touch-action:none; }
+.knead-btn{ position:relative; width:100%; max-width:360px; margin-top:auto; touch-action:none; }
+/* 引导手势：提示「点击揉面」，首次点击后消失 */
+.tap-hand{ position:absolute; right:26px; bottom:-14px; font-size:34px; line-height:1;
+  pointer-events:none; filter:drop-shadow(0 2px 2px rgba(0,0,0,.45));
+  animation:tapHand 1s ease-in-out infinite; transform-origin:center top; }
+.tap-hand.hidden{ display:none; }
+@keyframes tapHand{
+  0%,100%{ transform:translateY(0) rotate(-8deg); }
+  45%{ transform:translateY(-14px) rotate(-8deg); }
+  60%{ transform:translateY(2px) rotate(-8deg); }
+}
 
 /* ---------- ③ 发酵 / ④ 烘焙 控制按钮 ---------- */
 .temp-btns,.fire-btns{ display:flex; gap:10px; width:100%; max-width:360px; }
+.temp-btns,.fire-btns{ margin-top:-20px; }   /* 温度/火力按钮略向上靠 */
 .temp-btn,.fire-btn{ flex:1; font-family:inherit; font-size:14px; color:var(--ink); cursor:pointer;
   background:rgba(255,247,228,.95); border:3px solid var(--line); border-radius:12px; padding:8px 4px 6px;
   display:flex; flex-direction:column; align-items:center; line-height:1.2; box-shadow:0 3px 0 var(--line); }
@@ -209,19 +295,31 @@ img{ image-rendering:pixelated; image-rendering:crisp-edges; }
   box-shadow:0 0 0 2px var(--gold), 0 3px 0 var(--gold-d); }
 .fire-btn{ background:rgba(90,58,31,.92); color:#ffe9b8; }
 .fire-btn.is-on{ background:#a5511c; border-color:#ffce4a; }
-.take-btn{ width:100%; max-width:360px; }
+.take-btn{ width:100%; max-width:360px; margin-top:auto; position:relative; }
+/* 进入最佳区时强引导：按钮发光脉动 + 手势提示「现在取出」 */
+.take-btn.ready{ animation:takeReady .55s ease-in-out infinite;
+  box-shadow:0 0 0 3px #fff, 0 0 18px 5px var(--gold), 0 4px 0 var(--line); }
+@keyframes takeReady{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.05); } }
 
 /* ---------- ⑤ 切片机 ---------- */
 .slicer{ width:100%; max-width:360px; display:flex; flex-direction:column; align-items:center; gap:10px;
   background:rgba(255,247,228,.7); border:3px solid var(--line); border-radius:16px; padding:14px; }
-.loaf{ position:relative; width:240px; height:150px; }
+.loaf{ position:relative; width:300px; height:196px; }
 .loaf-img{ position:absolute; inset:0; width:100%; height:100%; object-fit:contain;
   filter:drop-shadow(0 5px 6px rgba(0,0,0,.3)); }
 .thick-zone{ position:absolute; top:6px; bottom:6px; left:42%; width:16%;
   background:repeating-linear-gradient(45deg,rgba(123,224,143,.45),rgba(123,224,143,.45) 6px,rgba(108,196,123,.45) 6px,rgba(108,196,123,.45) 12px);
   border-left:2px dashed var(--green-d); border-right:2px dashed var(--green-d); border-radius:4px; }
-.slice-cut{ position:absolute; top:-8px; bottom:-8px; left:0; width:4px; margin-left:-2px; background:var(--red);
-  box-shadow:0 0 6px rgba(232,89,90,.9); z-index:3; }
+/* 切割位置：细引导线穿过吐司，上方悬停一把刀，点切时刀挥下 */
+.slice-cut{ position:absolute; top:30px; bottom:30px; left:0; width:2px; margin-left:-1px; z-index:4;
+  background:rgba(232,89,90,.6); box-shadow:0 0 5px rgba(232,89,90,.5); }
+.slice-cut .knife{ position:absolute; left:50%; bottom:100%; width:54px; margin-left:-27px;
+  transform:translateY(10px) rotate(-46deg); transform-origin:center;
+  filter:drop-shadow(0 3px 3px rgba(0,0,0,.45)); }
+.slice-cut .knife.chop{ animation:knifeChop .3s ease-in; }
+@keyframes knifeChop{ 0%{ transform:translateY(10px) rotate(-46deg); }
+  45%{ transform:translateY(66px) rotate(-46deg); }
+  100%{ transform:translateY(10px) rotate(-46deg); } }
 .slice-tray{ display:flex; gap:5px; min-height:40px; align-items:center; }
 .slice-tray img{ width:38px; height:38px; object-fit:contain; animation:popIn .3s ease; }
 .slice-count{ font-size:14px; color:var(--brown); }
@@ -265,6 +363,27 @@ img{ image-rendering:pixelated; image-rendering:crisp-edges; }
   opacity:0; transform:scale(0); }
 .fly-words.show span{ animation:wordPop .5s ease forwards; }
 @keyframes wordPop{ to{opacity:1; transform:scale(1)} }
+
+/* 去边：用刀素材切。跟手刀（拖动时跟随手指）+ 演示刀（自动切掉上边） */
+.s6-cut-knife{ position:fixed; width:52px; margin:-26px 0 0 -26px; z-index:70; pointer-events:none;
+  transform:rotate(-46deg); transform-origin:center; filter:drop-shadow(0 3px 4px rgba(0,0,0,.5)); }
+.s6-demo-knife{ position:absolute; left:22px; top:-26px; width:58px; z-index:7; pointer-events:none;
+  transform-origin:center; filter:drop-shadow(0 2px 3px rgba(0,0,0,.5));
+  animation:s6DemoKnife 2.4s ease-in-out infinite; }
+/* 演示时上边随刀切过被切飞、再循环回位 */
+.edge-top.demo{ animation:s6DemoEdge 2.4s ease-in-out infinite; }
+@keyframes s6DemoKnife{
+  0%{   transform:translateX(0)    rotate(-46deg); opacity:0; }
+  8%{   transform:translateX(0)    rotate(-46deg); opacity:1; }
+  45%{  transform:translateX(130px) rotate(-46deg); opacity:1; }
+  64%{  transform:translateX(130px) rotate(-46deg); opacity:0; }
+  100%{ transform:translateX(0)    rotate(-46deg); opacity:0; }
+}
+@keyframes s6DemoEdge{
+  0%,45%{ transform:translateY(0)    rotate(0);    opacity:1; }
+  66%{    transform:translateY(-58px) rotate(-12deg); opacity:0; }
+  100%{   transform:translateY(-58px) rotate(-12deg); opacity:0; }
+}
 
 /* =====================================================================
    结算
@@ -369,6 +488,25 @@ img{ image-rendering:pixelated; image-rendering:crisp-edges; }
 .brand-logo{ position:absolute; top:8px; left:8px; width:52px; z-index:45; pointer-events:none;
   filter:drop-shadow(0 2px 3px rgba(0,0,0,.45)); }
 
+/* 右上角旋转音符按钮（背景音乐开关） */
+.music-btn{ position:absolute; top:12px; right:12px; z-index:88; width:42px; height:42px;
+  border-radius:50%; border:2px solid var(--gold); background:rgba(40,26,12,.62);
+  color:#ffe9b8; font-size:22px; line-height:1; cursor:pointer; padding:0;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 2px 6px rgba(0,0,0,.4); transition:transform .08s, opacity .2s; }
+.music-btn:active{ transform:scale(.92); }
+.music-btn .note{ display:inline-block; animation:noteSpin 2.6s linear infinite; }
+.music-btn.paused{ opacity:.55; }
+.music-btn.paused .note{ animation-play-state:paused; }
+@keyframes noteSpin{ to{ transform:rotate(360deg); } }
+/* 点击音符可关闭音乐 的提示气泡 */
+.music-hint{ position:absolute; top:60px; right:8px; z-index:88; pointer-events:none;
+  background:rgba(40,26,12,.85); color:#ffe9b8; font-size:12px; padding:5px 9px; border-radius:9px;
+  white-space:nowrap; box-shadow:0 2px 6px rgba(0,0,0,.4); animation:fadeIn .3s ease; }
+.music-hint::after{ content:''; position:absolute; top:-6px; right:16px; border:5px solid transparent;
+  border-bottom-color:rgba(40,26,12,.85); }
+.music-hint.hidden{ display:none; }
+
 /* ---------- 硬边小怪兽（去边台的“硬边”敌人） ---------- */
 .edge-mon{ position:absolute; top:-30px; left:50%; width:52px; height:52px; object-fit:contain;
   transform:translateX(-50%); z-index:6; pointer-events:none;
@@ -379,7 +517,8 @@ img{ image-rendering:pixelated; image-rendering:crisp-edges; }
 .edge-mon.defeated{ transition:transform .8s cubic-bezier(.3,1.3,.5,1), opacity .8s; }
 
 /* ---------- 全程跟随的小面包师 ---------- */
-.npc-buddy{ position:absolute; right:2px; bottom:88px; width:74px; z-index:38; pointer-events:none; }
+.npc-buddy{ position:absolute; left:calc(100% - 84px); bottom:14%; width:74px; z-index:38; pointer-events:none;
+  transition:left .45s cubic-bezier(.34,1.3,.5,1), bottom .45s cubic-bezier(.34,1.3,.5,1); }
 .npc-buddy img{ width:100%; display:block; filter:drop-shadow(0 4px 5px rgba(0,0,0,.4));
   animation:npcBob 2.2s ease-in-out infinite; transform-origin:bottom center; }
 @keyframes npcBob{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
@@ -387,13 +526,21 @@ img{ image-rendering:pixelated; image-rendering:crisp-edges; }
 @keyframes npcHop{ 0%,100%{transform:translateY(0) rotate(0)} 35%{transform:translateY(-14px) rotate(-6deg)} 70%{transform:translateY(0) rotate(4deg)} }
 .npc-buddy.react-nervous img{ animation:npcShake .3s linear 4; }
 @keyframes npcShake{ 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px) rotate(-3deg)} 75%{transform:translateX(4px) rotate(3deg)} }
-.npc-bubble{ position:absolute; right:66px; bottom:38px; max-width:140px; white-space:nowrap;
+/* 气泡固定在小面包师头顶上方，跟随其位置（默认居中） */
+.npc-bubble{ position:absolute; left:50%; bottom:100%; margin-bottom:8px; width:max-content; max-width:150px;
   background:rgba(255,250,235,.97); border:2px solid var(--line); border-radius:12px; padding:5px 10px;
-  font-size:13px; color:var(--ink); box-shadow:0 3px 0 rgba(0,0,0,.2); opacity:0; transform:translateY(6px) scale(.85);
-  transform-origin:right bottom; transition:.18s; }
-.npc-bubble::after{ content:''; position:absolute; right:-9px; bottom:10px; border:6px solid transparent;
-  border-left-color:var(--line); }
-.npc-bubble.show{ opacity:1; transform:none; }
+  font-size:13px; line-height:1.35; color:var(--ink); box-shadow:0 3px 0 rgba(0,0,0,.2);
+  opacity:0; transform:translate(-50%,6px) scale(.85); transform-origin:center bottom; transition:.18s; }
+.npc-bubble::after{ content:''; position:absolute; left:50%; bottom:-9px; transform:translateX(-50%);
+  border:6px solid transparent; border-top-color:var(--line); }
+.npc-bubble.show{ opacity:1; transform:translate(-50%,0) scale(1); }
+/* 防止气泡出画：靠左时向右展开，靠右时向左展开 */
+.npc-buddy.side-left .npc-bubble{ left:0; transform:translate(0,6px) scale(.85); transform-origin:left bottom; }
+.npc-buddy.side-left .npc-bubble.show{ transform:translate(0,0) scale(1); }
+.npc-buddy.side-left .npc-bubble::after{ left:34px; transform:none; }
+.npc-buddy.side-right .npc-bubble{ left:auto; right:0; transform:translate(0,6px) scale(.85); transform-origin:right bottom; }
+.npc-buddy.side-right .npc-bubble.show{ transform:translate(0,0) scale(1); }
+.npc-buddy.side-right .npc-bubble::after{ left:auto; right:34px; transform:none; }
 .npc-bubble.mood-happy{ border-color:var(--green-d); color:var(--green-d); }
 .npc-bubble.mood-nervous{ border-color:var(--red-d); color:var(--red-d); }
 
@@ -407,6 +554,6 @@ img{ image-rendering:pixelated; image-rendering:crisp-edges; }
   .hero-mascot{ width:112px; height:112px; }
   .st-title{ font-size:20px; }
   .big-sprite{ width:116px; height:116px; }
-  .dough{ width:100px; height:100px; }
-  .loaf{ width:210px; height:130px; }
+  .dough{ width:150px; height:150px; }
+  .loaf{ width:268px; height:176px; }
 }
